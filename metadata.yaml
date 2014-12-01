@@ -1,0 +1,20 @@
+name: joomla
+summary: "Joomla CMS"
+maintainer: Vasiliy Tolstov <v.tolstov@selfip.ru>
+description: |
+  Joomla is an award-winning content management system (CMS), 
+  which enables you to build Web sites and powerful online 
+  applications.
+categories: ["applications"]
+requires:
+  mail:
+    interface: smtp
+  db:
+    interface: mysql
+provides:
+  website:
+    interface: http
+peers:
+  loadbalancer:
+    interface: reversenginx
+    

@@ -1,0 +1,46 @@
+#!/bin/sh -ex
+
+# Boiler plate code to print context of this script
+juju-log $JUJU_REMOTE_UNIT modified its settings
+juju-log Relation settings:
+relation-get
+juju-log Relation members:
+relation-list
+
+. inc/common
+
+# If there is a config file already, Joomla is already installed & config'ed
+if [ -f "$config_file_path" ]; then
+	# TODO: Update the config file with new DB values even 
+	#       if joomla is alredy installed
+	juju-log "Joomla is already setup, just silently going away"
+	exit 0
+fi
+
+# Relation properties
+database=`relation-get database`
+user=`relation-get user`
+password=`relation-get password`
+host=`relation-get private-address`
+
+# Sanity checks
+## If there is no database name defined, die
+if [ -z "$database" ] ; then
+    exit 0
+fi
+
+juju-log Config
+
+sed -i "s|value=\"<?php echo \$this->getFormData()->getDbHost() ?>\"|value=\"$host\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
+sed -i "s|value=\"<?php echo \$this->getFormData()->getDbName() ?>\"|value=\"$database\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
+sed -i "s|value=\"<?php echo \$this->getFormData()->getDbUser() ?>\"|value=\"$user\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
+sed -i "s|id=\"password\" value=\"\"|id=\"password\" value=\"$password\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
+
+
+# least access permissions for the configuration file
+#chown www-data:www-data $config_file_path
+#chmod 0640 $config_file_path
+
+juju-log "Opening port 80"
+open-port 80/tcp
+open-port 443/tcp
