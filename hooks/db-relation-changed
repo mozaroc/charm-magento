@@ -31,7 +31,7 @@ fi
 
 juju-log Config
 
-sed -i "s|value=\"<?php echo \$this->getFormData()->getDbHost() ?>\"|value=\"$host\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
+sed -i "s|value=\"<?php echo \$this->getFormData()->getDbHost() ?>\"|value=\"localhost\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
 sed -i "s|value=\"<?php echo \$this->getFormData()->getDbName() ?>\"|value=\"$database\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
 sed -i "s|value=\"<?php echo \$this->getFormData()->getDbUser() ?>\"|value=\"$user\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
 sed -i "s|id=\"password\" value=\"\"|id=\"password\" value=\"$password\"|g" $install_path/app/design/install/default/default/template/install/db/mysql4.phtml
